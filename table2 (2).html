@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        table{
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        td{ 
+            align-content:center;
+            background-color:  #c3cbc6;
+            width:50px;
+            height: 40px;
+            color: #b19c88;
+            text-align: center;
+        }
+        #monthselector,#yearselector{
+            font-size: large;
+            color: #a9927d;
+            font-weight:bold;
+        }
+        #mon_de,#monthselector,#mon_add{
+            display: inline;
+        }
+        #mon_de,#mon_add,#year_add,#year_de{
+            border-radius:30px;
+            height: 30px;
+            width: 50px;
+            border: solid 1px #95bb8d;
+            color: #748b6f;
+            background-color: #c3cbc6;
+            font-size: 20px;
+        }
+        #year_de,#yearselector,#year_add{
+            display: inline;
+        }
+        .monthselector_class {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+         }
+        .yearselector_class{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;    
+        }
+
+    </style>
+    <div class="monthselector_class">
+        <button onclick="decrease_month()" id="mon_de"><</button>
+        <div id="monthselector" >1</div>
+        <button onclick="add_month()" id="mon_add">></button>
+    </div>
+    <div id="Maincontent"></div> 
+    <div class="yearselector_class">
+        <button onclick="decrease_year()" id="year_de"><</button>
+        <div id="yearselector" >2023</div>
+        <button onclick="add_year()" id="year_add">></button>
+    </div>
+    <script>
+        var calendar_week=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        var leap_year=[31,29,31,30,31,30,31,31,30,31,30,31];
+        var normal_year=[31,28,31,30,31,30,31,31,30,31,30,31];
+        var month=document.getElementById("monthselector");
+        var year=document.getElementById("yearselector");
+        var isLeap=false;
+        var month_num=1;
+        var year_num=2023;
+        var days_in_month=0;
+        var firstday=0;
+        var tableItem=0;
+        var tdItem=0;
+        var trItem=0;
+        var times=0;
+        
+        function decrease_month(){
+            if(month_num>=2)
+            month_num-=1;
+            month.innerHTML=month_num.toString();
+            the_day_of_month();
+        }
+        function add_month(){
+            if (month_num<=11)
+            month_num+=1;
+            month.innerHTML=month_num.toString();
+            the_day_of_month();
+        }
+        function add_year(){
+
+            year_num+=1;
+            year.innerHTML=year_num.toString();
+            the_day_of_month();
+        }
+        function decrease_year(){
+            year_num-=1;
+            year.innerHTML=year_num.toString();
+            the_day_of_month();
+        }
+        //判斷是否為閏年
+        function isLeapOrNot(){
+            if(year_num%4!=0||(year_num%100==0)&&(year_num%400!=0)){
+                isLeap=false;
+            }
+            else{
+                isLeap=true;
+        
+            }
+        }
+        //當月有幾天
+        the_day_of_month();
+        function the_day_of_month(){
+            if(isLeapOrNot(year_num)==true)
+            {
+                days_in_month=leap_year[month_num-1];
+            }
+            else
+            {
+                days_in_month=normal_year[month_num-1];
+            }
+            firstday=getfirstday();
+            if(times==0){
+                todo();
+            }
+            else{
+                todo2();
+            }
+            
+
+        }
+        function getfirstday(){
+            var tem= new Date(year_num,month_num-1,1).getDay();
+            return tem;
+          }
+
+        function todo(){
+            tableItem=document.createElement("table");
+            var a=1;
+            var t=0;
+            for(var i=1;i<=6;i++){
+               trItem=document.createElement("tr");
+            for(var o=1;o<=7;o++){
+                if(i==1){
+                    tdItem=document.createElement("td");
+                    tdItem.innerHTML=(calendar_week[o-1]);
+                    trItem.appendChild(tdItem) ;
+                }
+                else if(i==2&&t<firstday||a>days_in_month){
+                    tdItem=document.createElement("td");
+                    tdItem.innerHTML=("&nbsp");
+                    trItem.appendChild(tdItem);
+                    t++;
+                }
+                else{
+                    tdItem=document.createElement("td");
+                    tdItem.innerHTML=(a.toString());
+                    trItem.appendChild(tdItem);
+                    a++;
+                }
+                
+                tableItem.appendChild(trItem);
+
+            }
+            document.getElementById("Maincontent").appendChild(tableItem); 
+
+        }
+
+        document.getElementById("Maincontent").appendChild(tableItem);
+        var table = document.getElementById("Maincontent");
+        while (table.firstChild) {
+        table.removeChild(table.firstChild);
+        }
+                    
+        
+        
+        function todo2(){
+            a=1;
+            t=0;
+            for(var o=1;o<=7;o++){
+                if(i==1){
+                    tdItem.innerHTML=(calendar_week[o-1]);
+                    trItem.appendChild(tdItem) ;
+                }
+                else if(i==2&&t<firstday||a>days_in_month){
+                    tdItem.innerHTML=("&nbsp");
+                    trItem.appendChild(tdItem);
+                    t++;
+                }
+                else{
+                    tdItem.innerHTML=(a.toString());
+                    trItem.appendChild(tdItem);
+                    a++;
+                }
+                
+                tableItem.appendChild(trItem);
+
+            }
+            
+
+        }
+        document.getElementById("Maincontent").appendChild(tableItem);
+        }
+
+
+
+    </script>
+</body>
+
+</html>
